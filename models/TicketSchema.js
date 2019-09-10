@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TicketSchema = new mongoose.Schema({
-    folio : String,
+    folio : Number,
     date : {
         type: Date,
         required: true
