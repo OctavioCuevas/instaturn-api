@@ -31,7 +31,7 @@
     app.get('/api/v1/user', (req, res) => {
         User.find()
             .then( users => res.status(200).send({
-                'mensaje': 'Artículos encontrados exitosamente',
+                'mensaje': 'Usuarios encontrados exitosamente',
                 'usuarios': users,
             }))
             .catch( err => res.status(400).send({
