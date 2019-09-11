@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const TicketSchema = new mongoose.Schema({
     folio : Number,
@@ -11,12 +12,10 @@ const TicketSchema = new mongoose.Schema({
         default: new Date()
     },
     regular_user : {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId, ref: 'users'
     },
     business_user : {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId, ref: 'users'
     },
     active : Boolean
 });

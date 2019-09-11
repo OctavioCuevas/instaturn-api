@@ -24,6 +24,14 @@ const UserSchema = new mongoose.Schema({
     active : {
         type: Boolean,
         default: true
+    },
+    fecha_ticket : {
+        type: Date,
+        default: new Date()
+    },
+    num_ult_ticket : {
+        type: Number,
+        default: 0
     }
 });
 

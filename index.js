@@ -5,6 +5,7 @@
     require('./database/index.js');
     const User = require('./models/UserSchema');
     const Ticket = require('./models/TicketSchema');
+    const mongoose = require('mongoose');
 
     app.use(bodyParser.urlencoded({extended:false}));
     app.use(bodyParser.json());
@@ -26,7 +27,6 @@
                 'error': err,
             }));    
     });
-
     // READ ALL USERS
     app.get('/api/v1/user', (req, res) => {
         User.find()
@@ -39,7 +39,6 @@
             'error': err,
         }))
     });
-
     /****** READ ONE USER******/
     app.get('/api/v1/user/:id', (req, res) => {
         User.findById(req.params.id)
@@ -70,12 +69,6 @@
             'error': err,
         }));
     });
-
-    //SERVER START
-    app.listen(PORT,()=>{
-        console.log(`Servidor corriendo en puerto ${PORT}`);  
-    });
-
     /****** INSERT TICKET ******/
     app.post('/api/v1/ticket', (req, res) => {
         // Pedimos el ticket de req.body
@@ -92,4 +85,56 @@
                 'mensaje': 'Error al crear ticket',
                 'error': err,
             }));    
+    });
+    /****** READ REGULAR USER'S TICKETS******/
+    app.get('/api/v1/ticket/:id_user/', (req, res) => {
+        console.log(req.params.id_user);
+        Ticket.find({"regular_user" : mongoose.Types.ObjectId(req.params.id_user), "active" : true})
+            .then(tickets => res.status(200).send({
+                'mensaje': 'Tickets encontrados exitosamente',
+                'tickets': tickets,
+            }))
+            .catch( err => res.status(400).send({
+            'mensaje': 'Error al pedir la lista de tickets',
+            'error': err,
+        }))
+    });
+    /****** READ REGULAR USER'S TICKETS******/
+    app.get('/api/v1/ticket/b/:id_user/', (req, res) => {
+        Ticket.find({"business_user" : mongoose.Types.ObjectId(req.params.id_user), "active" : true})
+            .then(tickets => res.status(200).send({
+                'mensaje': 'Tickets encontrados exitosamente',
+                'tickets': tickets,
+            }))
+            .catch( err => res.status(400).send({
+            'mensaje': 'Error al pedir la lista de tickets',
+            'error': err,
+        }))
+    });
+    app.get('/api/v1/ticket/b/next/:id_user/', (req, res) => {
+        Ticket.findOne({"business_user" : mongoose.Types.ObjectId(req.params.id_user), "active" : true}).sort()
+            .then(tickets => res.status(200).send({
+                'mensaje': 'Tickets encontrados exitosamente',
+                'tickets': tickets,
+            }))
+            .catch( err => res.status(400).send({
+            'mensaje': 'Error al pedir la lista de tickets',
+            'error': err,
+        }))
+    });
+    //UPDATE TICKET
+    app.patch('/api/v1/ticket/:id', (req, res) => {
+        Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            .then( user => res.status(200).send({
+                'mensaje': 'Ticket encontrado exitosamente',
+                'ticket': user,
+            }))
+            .catch( err => res.status(400).send({
+            'mensaje': 'Error al pedir el ticket',
+            'error': err,
+        }));
+    });
+    //SERVER START
+    app.listen(PORT,()=>{
+        console.log(`Servidor corriendo en puerto ${PORT}`);  
     });
