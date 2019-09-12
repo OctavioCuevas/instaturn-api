@@ -49,6 +49,17 @@
                         'mensaje': 'No se encontró el usuario con el id proporcionado'})
             )
     });
+    app.get('/api/v1/user/auth/:user_name,:user_pass', (req, res) => {
+        User.findOne({"name" : req.params.user_name, "password" : req.params.user_pass})
+            .then(tickets => res.status(200).send({
+                'mensaje': 'usuario verificado exitosamente',
+                'tickets': tickets,
+            }))
+            .catch( err => res.status(400).send({
+            'mensaje': 'Error al autenticar',
+            'error': err,
+        }))
+    });
      //UPDATE USER
      app.patch('/api/v1/user/:id', (req, res) => {
         /*
@@ -99,7 +110,7 @@
             'error': err,
         }))
     });
-    /****** READ REGULAR USER'S TICKETS******/
+    /****** READ BUSINESS USER'S TICKETS******/
     app.get('/api/v1/ticket/b/:id_user/', (req, res) => {
         Ticket.find({"business_user" : mongoose.Types.ObjectId(req.params.id_user), "active" : true})
             .then(tickets => res.status(200).send({
@@ -111,6 +122,7 @@
             'error': err,
         }))
     });
+    /****** READ NEXT TICKET ******/
     app.get('/api/v1/ticket/b/next/:id_user/', (req, res) => {
         Ticket.findOne({"business_user" : mongoose.Types.ObjectId(req.params.id_user), "active" : true}).sort()
             .then(tickets => res.status(200).send({
