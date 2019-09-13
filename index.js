@@ -6,9 +6,12 @@
     const User = require('./models/UserSchema');
     const Ticket = require('./models/TicketSchema');
     const mongoose = require('mongoose');
+    const cors = require('cors');
 
     app.use(bodyParser.urlencoded({extended:false}));
     app.use(bodyParser.json());
+    app.use(cors());
+
 
     /****** INSERT USER ******/
     app.post('/api/v1/user', (req, res) => {
@@ -73,7 +76,7 @@
         */
         User.findByIdAndUpdate(req.params.id, req.body, { new: true })
             .then( user => res.status(200).send({
-                'mensaje': 'Usuario encontrado exitosamente',
+                'mensaje': 'Usuario encontrado encontrado',
                 'usuario': user,
             }))
             .catch( err => res.status(400).send({
