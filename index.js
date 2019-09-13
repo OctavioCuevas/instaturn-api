@@ -49,8 +49,9 @@
                         'mensaje': 'No se encontró el usuario con el id proporcionado'})
             )
     });
-    app.get('/api/v1/user/auth/:user_name,:user_pass', (req, res) => {
-        User.findOne({"name" : req.params.user_name, "password" : req.params.user_pass})
+    /****** AUTHENTICATE ******/
+    app.get('/api/v1/user/auth/:email,:pass', (req, res) => {
+        User.findOne({"email" : req.params.email, "password" : req.params.pass})
             .then(tickets => res.status(200).send({
                 'mensaje': 'usuario verificado exitosamente',
                 'tickets': tickets,
